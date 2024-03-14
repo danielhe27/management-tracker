@@ -14,7 +14,7 @@ VALUES (1, 'Lead Engineer', 150000, 1),
        (7, 'Sales Lead', 100000, 4),
        (8, 'Account Manager', 150000, 1);
 
-INSERT INTO employees (id, first_name, last_name, roles_id, manager_id)
+INSERT INTO employees (id, first_name, last_name, role_id, manager_id)
 VALUES (1, 'John', 'Doe', 1, NULL),
        (2, 'Mike', 'Chan', 2, 1),
        (3, 'Ashley', 'Rodriguez', 3, NULL),
