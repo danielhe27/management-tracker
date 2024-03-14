@@ -18,18 +18,7 @@ const connection = mysql.createConnection({
 connection.connect(err => {
   if (err) throw err;
   console.log('Connected as ID ' + connection.threadId);
-  afterConnection();
-});
-
-// Function after connection is established and welcome image shows
-const afterConnection = () => {
-  console.log("***********************************");
-  console.log("*                                 *");
-  console.log("*        EMPLOYEE MANAGER         *");
-  console.log("*                                 *");
-  console.log("***********************************");
-  promptUser();
-};
+}); 
 
 // Inquirer prompt for the first action
 const promptUser = () => {
@@ -322,7 +311,6 @@ addEmployee = () => {
 
                 const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " "+ last_name, value: id }));
 
-                // console.log(managers);
 
                 inquirer.prompt([
                   {
