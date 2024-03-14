@@ -1,7 +1,5 @@
 DROP DATABASE IF EXISTS super_db;
-
 CREATE DATABASE super_db;
-
 USE super_db;
 
 CREATE TABLE departments (
@@ -10,22 +8,18 @@ CREATE TABLE departments (
 );
 
 CREATE TABLE roles (
-  id INT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   title VARCHAR(30) NOT NULL,
-  salary DECIMAL NOT NULL,
+  salary DECIMAL(15,2) NOT NULL,
   department_id INT,
-  FOREIGN KEY (department_id)
-    REFERENCES departments(id)
-    ON DELETE SET NULL
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
 );
 
 CREATE TABLE employees (
-  id INT PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
   manager_id INT,
   role_id INT,
-FOREIGN KEY (role_id) 
-REFERENCES roles(id) 
-ON DELETE SET NULL
+  FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE SET NULL
 );
