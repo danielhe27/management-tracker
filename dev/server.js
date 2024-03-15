@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mysql = require('mysql2');
 
 // Import inquirer
@@ -5,14 +6,13 @@ const inquirer = require('inquirer');
 // Import console.table
 const cTable = require('console.table');
 
-require('dotenv').config();
 
 // Connection to database
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASS || 'Brooklyn.99',
-  database: process.env.DB_NAME || 'super_db'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME
 });
 
 connection.connect(err => {
