@@ -630,11 +630,17 @@ deleteEmployee = () => {
 viewBudget = () => {
   console.log('Showing budget by department...\n');
 
-  const sql = `SELECT departments.id AS id, 
+  // Budget = total salary of the employees in each department (one salary per employee).
+  // LEFT JOINs keep departments with no employees, shown as 0.
+  const sql = `SELECT departments.id AS id,
                       departments.name AS department,
-                      SUM(salary) AS budget
-               FROM  roles  
-               JOIN departments ON roles.department_id = departments.id GROUP BY  departments.id`;
+                      COUNT(employees.id) AS employees,
+                      COALESCE(SUM(CASE WHEN employees.id IS NOT NULL THEN roles.salary END), 0) AS budget
+               FROM departments
+               LEFT JOIN roles ON roles.department_id = departments.id
+               LEFT JOIN employees ON employees.role_id = roles.id
+               GROUP BY departments.id, departments.name
+               ORDER BY budget DESC`;
   
   connection.promise().query(sql)
   .then(([rows, fields]) => {
