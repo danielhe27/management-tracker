@@ -346,7 +346,10 @@ addEmployee = () => {
 
           connection.promise().query(managerSql)
             .then(([data]) => {
-              const managers = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
+              const managers = [
+                { name: "None", value: null },
+                ...data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }))
+              ];
 
               inquirer.prompt([
                 {
@@ -472,10 +475,16 @@ updateManager = () => {
       // Proceed with fetching managers only if a valid employee was selected
       return connection.promise().query("SELECT * FROM employees")
         .then(([managers]) => {
-          const managersChoices = managers.map(({ id, first_name, last_name }) => ({
-            name: first_name + " " + last_name,
-            value: id
-          }));
+          // An employee can't manage themselves; "None" clears the manager.
+          const managersChoices = [
+            { name: "None", value: null },
+            ...managers
+              .filter(({ id }) => id !== empChoice.employeeId)
+              .map(({ id, first_name, last_name }) => ({
+                name: first_name + " " + last_name,
+                value: id
+              }))
+          ];
 
           return inquirer.prompt([
             {
@@ -491,8 +500,8 @@ updateManager = () => {
         });
     })
     .then(({ employeeId, managerId } = {}) => {
-      if (!employeeId || !managerId) {
-        return; // Check if employeeId or managerId is missing and exit if so
+      if (!employeeId || managerId === undefined) {
+        return; // Exit if nothing was selected (null manager means "None")
       }
       const sql = `UPDATE employees SET manager_id = ? WHERE id = ?`;
       return connection.promise().query(sql, [managerId, employeeId]);
